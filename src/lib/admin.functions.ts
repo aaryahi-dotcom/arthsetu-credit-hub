@@ -162,7 +162,7 @@ export const reviewApplication = createServerFn({ method: "POST" })
 
     const { data: updated, error: updErr } = await supabase
       .from("applications")
-      .update(update)
+      .update(update as never)
       .eq("id", data.id)
       .select()
       .single();
