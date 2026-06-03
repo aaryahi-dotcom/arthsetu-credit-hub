@@ -160,6 +160,19 @@ function AuthPage() {
             />
           </div>
 
+          {!isSignup && (
+            <div className="-mt-1 text-right">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={submitting}
+                className="text-xs font-medium text-primary hover:underline disabled:opacity-50"
+              >
+                Forgot password?
+              </button>
+            </div>
+          )}
+
           <Button
             type="submit"
             disabled={submitting}
