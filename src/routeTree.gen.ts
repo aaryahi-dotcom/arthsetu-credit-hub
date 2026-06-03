@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ComplianceRouteImport } from './routes/compliance'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -23,6 +24,11 @@ const ComplianceRoute = ComplianceRouteImport.update({
   path: '/compliance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,34 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compliance': typeof ComplianceRoute
   '/how-it-works': typeof HowItWorksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compliance': typeof ComplianceRoute
   '/how-it-works': typeof HowItWorksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compliance': typeof ComplianceRoute
   '/how-it-works': typeof HowItWorksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/compliance' | '/how-it-works'
+  fullPaths: '/' | '/auth' | '/compliance' | '/how-it-works'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compliance' | '/how-it-works'
-  id: '__root__' | '/' | '/compliance' | '/how-it-works'
+  to: '/' | '/auth' | '/compliance' | '/how-it-works'
+  id: '__root__' | '/' | '/auth' | '/compliance' | '/how-it-works'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   ComplianceRoute: typeof ComplianceRoute
   HowItWorksRoute: typeof HowItWorksRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComplianceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   ComplianceRoute: ComplianceRoute,
   HowItWorksRoute: HowItWorksRoute,
 }
