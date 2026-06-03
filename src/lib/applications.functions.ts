@@ -52,8 +52,8 @@ export const submitApplication = createServerFn({ method: "POST" })
         recommended_credit_limit: result.recommended_credit_limit,
         recommended_interest_rate: result.recommended_interest_rate,
         net_worth: result.net_worth,
-        factors: result.factors,
-        recommendations: result.recommendations,
+        factors: result.factors as unknown as Record<string, never>,
+        recommendations: result.recommendations as unknown as Record<string, never>,
         model_version: result.model_version,
         status: "pending",
       })
