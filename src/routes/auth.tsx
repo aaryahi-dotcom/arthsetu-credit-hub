@@ -44,6 +44,26 @@ function AuthPage() {
     }
   }, [loading, session, role, navigate]);
 
+  const handleForgotPassword = async () => {
+    const email = form.email.trim();
+    if (!email || !z.string().email().safeParse(email).success) {
+      toast.error("Enter your email above first, then tap “Forgot password”.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast.success("Password reset link sent — check your email.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send reset email");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
