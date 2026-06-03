@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as ComplianceRouteImport } from './routes/compliance'
 import { Route as IndexRouteImport } from './routes/index'
 
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComplianceRoute = ComplianceRouteImport.update({
+  id: '/compliance',
+  path: '/compliance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/compliance': typeof ComplianceRoute
   '/how-it-works': typeof HowItWorksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/compliance': typeof ComplianceRoute
   '/how-it-works': typeof HowItWorksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/compliance': typeof ComplianceRoute
   '/how-it-works': typeof HowItWorksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/how-it-works'
+  fullPaths: '/' | '/compliance' | '/how-it-works'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/how-it-works'
-  id: '__root__' | '/' | '/how-it-works'
+  to: '/' | '/compliance' | '/how-it-works'
+  id: '__root__' | '/' | '/compliance' | '/how-it-works'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComplianceRoute: typeof ComplianceRoute
   HowItWorksRoute: typeof HowItWorksRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compliance': {
+      id: '/compliance'
+      path: '/compliance'
+      fullPath: '/compliance'
+      preLoaderRoute: typeof ComplianceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComplianceRoute: ComplianceRoute,
   HowItWorksRoute: HowItWorksRoute,
 }
 export const routeTree = rootRouteImport
