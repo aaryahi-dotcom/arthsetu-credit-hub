@@ -1,29 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AuroraBackground } from "@/components/AuroraBackground";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { Hero } from "@/components/sections/Hero";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import { WhoItsFor } from "@/components/sections/WhoItsFor";
+import { Compliance } from "@/components/sections/Compliance";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "ArthSetu — Score the unscored | Alternate Credit Intelligence" },
+      {
+        name: "description",
+        content:
+          "Alternate credit scoring for small businesses, MSMEs and gig workers. Predict probability of default with explainable, bias-audited, human-reviewed decisions.",
+      },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="relative min-h-screen">
+      <AuroraBackground />
+      <SiteHeader />
+      <main>
+        <Hero />
+        <HowItWorks />
+        <WhoItsFor />
+        <Compliance />
+      </main>
+      <SiteFooter />
     </div>
   );
 }
