@@ -77,14 +77,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "ArthSetu — Score the unscored | Alternate Credit Intelligence" },
+      {
+        name: "description",
+        content:
+          "ArthSetu gives small businesses, MSMEs and gig workers a fair alternate credit score using UPI, utility and rent data — with bank-worker review and audit-ready decisions.",
+      },
+      { name: "author", content: "ArthSetu" },
+      { property: "og:title", content: "ArthSetu — Score the unscored" },
+      {
+        property: "og:description",
+        content:
+          "Alternate credit scoring for the thin-file: predict probability of default with explainable, bias-audited, human-reviewed decisions.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@ArthSetu" },
     ],
     links: [
       {
