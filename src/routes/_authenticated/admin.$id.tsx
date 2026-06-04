@@ -280,26 +280,90 @@ function AdminDetailPage() {
               </div>
             )}
 
+            {/* Email composer */}
+            <div className="mt-5 border-t border-border/60 pt-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-primary" />
+                  <p className="text-sm font-medium">Email the applicant</p>
+                </div>
+                <Switch checked={sendEmail} onCheckedChange={setSendEmail} />
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Compose the message the applicant receives with this decision.
+              </p>
+
+              {sendEmail && (
+                <div className="mt-4 space-y-3">
+                  <div className="space-y-1.5">
+                    <Label>Subject</Label>
+                    <Input
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="Email subject"
+                      maxLength={200}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Message</Label>
+                    <Textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      rows={7}
+                      placeholder="Write a personal note to the applicant…"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-border/60 bg-card/40 p-3">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <p className="text-sm font-medium">Attach full credit report</p>
+                        <p className="text-xs text-muted-foreground">
+                          Score, band, limit, rate &amp; recommendations
+                        </p>
+                      </div>
+                    </div>
+                    <Switch checked={includeReport} onCheckedChange={setIncludeReport} />
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="mt-5 grid grid-cols-2 gap-3">
               <Button
                 onClick={() => handleReview("approved")}
                 disabled={busy !== null}
                 className="bg-success text-success-foreground hover:opacity-90"
               >
-                {busy === "approved" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                Approve
+                {busy === "approved" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : sendEmail ? (
+                  <Send className="h-4 w-4" />
+                ) : (
+                  <Check className="h-4 w-4" />
+                )}
+                {sendEmail ? "Approve & send" : "Approve"}
               </Button>
               <Button
                 onClick={() => handleReview("rejected")}
                 disabled={busy !== null}
                 variant="destructive"
               >
-                {busy === "rejected" ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
-                Reject
+                {busy === "rejected" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : sendEmail ? (
+                  <Send className="h-4 w-4" />
+                ) : (
+                  <X className="h-4 w-4" />
+                )}
+                {sendEmail ? "Reject & send" : "Reject"}
               </Button>
             </div>
             <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Mail className="h-3.5 w-3.5" /> An email report is sent to the applicant on decision.
+              <Mail className="h-3.5 w-3.5" />
+              {override
+                ? "Your override replaces the AI decision before the report is sent."
+                : "The AI decision is used as-is for the applicant's report."}
             </p>
           </motion.div>
         </div>
