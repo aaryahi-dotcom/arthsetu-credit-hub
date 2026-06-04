@@ -11,6 +11,8 @@ import {
   ShieldAlert,
   Mail,
   AlertTriangle,
+  Send,
+  FileText,
 } from "lucide-react";
 import { getApplicationDetail, reviewApplication } from "@/lib/admin.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
@@ -70,7 +72,7 @@ const FIELD_GROUPS: { title: string; fields: [string, string][] }[] = [
 
 function AdminDetailPage() {
   const { id } = Route.useParams();
-  const { role, loading } = useAuth();
+  const { role, loading, session } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
 
@@ -82,6 +84,12 @@ function AdminDetailPage() {
   const [newScore, setNewScore] = useState("");
   const [busy, setBusy] = useState<"approved" | "rejected" | null>(null);
 
+  // Email composer state
+  const [sendEmail, setSendEmail] = useState(true);
+  const [includeReport, setIncludeReport] = useState(true);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     if (!loading && role && role !== "admin") {
       navigate({ to: "/dashboard", replace: true });
@@ -91,8 +99,20 @@ function AdminDetailPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-application", id],
     queryFn: () => detailFn({ data: { id } }),
-    enabled: role === "admin",
+    enabled: !!session && role === "admin",
   });
+
+  // Prefill the email composer once the applicant is loaded.
+  useEffect(() => {
+    const name = data?.application?.full_name;
+    if (!name) return;
+    setSubject((s) => s || "Your ArthSetu credit assessment is ready");
+    setMessage(
+      (m) =>
+        m ||
+        `Dear ${name},\n\nThank you for applying with ArthSetu. We have completed a careful review of your credit profile, and your personalised assessment is summarised below.\n\nIf you have any questions about this report, simply reply to this email and our team will be glad to help.\n\nWarm regards,\nThe ArthSetu Team`,
+    );
+  }, [data?.application?.full_name]);
 
   if (loading || (role && role !== "admin")) {
     return (
@@ -118,6 +138,10 @@ function AdminDetailPage() {
       toast.error("Please give a reason (min 5 chars) for the override.");
       return;
     }
+    if (sendEmail && subject.trim().length === 0) {
+      toast.error("Please add an email subject before sending.");
+      return;
+    }
     setBusy(decision);
     try {
       const res = await reviewFn({
@@ -127,13 +151,23 @@ function AdminDetailPage() {
           override,
           reason: override ? reason : undefined,
           new_score: override && newScore ? Number(newScore) : undefined,
+          send_email: sendEmail,
+          email_subject: sendEmail ? subject.trim() : undefined,
+          email_message: sendEmail ? message.trim() : undefined,
+          include_full_report: includeReport,
         },
       });
-      toast.success(
-        res.emailSent
-          ? `Decision saved. Report emailed to the applicant.`
-          : `Decision saved. (Email pending email-domain setup.)`,
-      );
+      if (!sendEmail) {
+        toast.success("Decision saved. No email was sent.");
+      } else if (res.emailSent) {
+        toast.success("Decision saved and the report was emailed to the applicant.");
+      } else {
+        toast.warning(
+          res.emailError
+            ? `Decision saved, but the email could not be sent: ${res.emailError}`
+            : "Decision saved, but email sending is not configured yet.",
+        );
+      }
       qc.invalidateQueries({ queryKey: ["admin-application", id] });
       qc.invalidateQueries({ queryKey: ["admin-applications"] });
       qc.invalidateQueries({ queryKey: ["admin-stats"] });
@@ -246,26 +280,90 @@ function AdminDetailPage() {
               </div>
             )}
 
+            {/* Email composer */}
+            <div className="mt-5 border-t border-border/60 pt-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-primary" />
+                  <p className="text-sm font-medium">Email the applicant</p>
+                </div>
+                <Switch checked={sendEmail} onCheckedChange={setSendEmail} />
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Compose the message the applicant receives with this decision.
+              </p>
+
+              {sendEmail && (
+                <div className="mt-4 space-y-3">
+                  <div className="space-y-1.5">
+                    <Label>Subject</Label>
+                    <Input
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="Email subject"
+                      maxLength={200}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Message</Label>
+                    <Textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      rows={7}
+                      placeholder="Write a personal note to the applicant…"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-border/60 bg-card/40 p-3">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <p className="text-sm font-medium">Attach full credit report</p>
+                        <p className="text-xs text-muted-foreground">
+                          Score, band, limit, rate &amp; recommendations
+                        </p>
+                      </div>
+                    </div>
+                    <Switch checked={includeReport} onCheckedChange={setIncludeReport} />
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="mt-5 grid grid-cols-2 gap-3">
               <Button
                 onClick={() => handleReview("approved")}
                 disabled={busy !== null}
                 className="bg-success text-success-foreground hover:opacity-90"
               >
-                {busy === "approved" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                Approve
+                {busy === "approved" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : sendEmail ? (
+                  <Send className="h-4 w-4" />
+                ) : (
+                  <Check className="h-4 w-4" />
+                )}
+                {sendEmail ? "Approve & send" : "Approve"}
               </Button>
               <Button
                 onClick={() => handleReview("rejected")}
                 disabled={busy !== null}
                 variant="destructive"
               >
-                {busy === "rejected" ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
-                Reject
+                {busy === "rejected" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : sendEmail ? (
+                  <Send className="h-4 w-4" />
+                ) : (
+                  <X className="h-4 w-4" />
+                )}
+                {sendEmail ? "Reject & send" : "Reject"}
               </Button>
             </div>
             <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Mail className="h-3.5 w-3.5" /> An email report is sent to the applicant on decision.
+              <Mail className="h-3.5 w-3.5" />
+              {override
+                ? "Your override replaces the AI decision before the report is sent."
+                : "The AI decision is used as-is for the applicant's report."}
             </p>
           </motion.div>
         </div>

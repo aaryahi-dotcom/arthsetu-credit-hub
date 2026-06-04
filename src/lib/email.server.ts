@@ -15,6 +15,19 @@ interface CreditReportArgs {
   interestRate: number;
   recommendations: { title: string; action: string }[];
   overrideApplied: boolean;
+  customSubject?: string;
+  customMessage?: string;
+  includeFullReport?: boolean;
+  report?: {
+    defaultProbability: number;
+    interestRate: number;
+    annualIncome: number;
+    monthlyIncome: number;
+    netWorth: number;
+    cibilScore: number;
+    loanRequested: number;
+    purpose: string;
+  };
 }
 
 function getOrigin(): string | null {
@@ -43,7 +56,7 @@ export async function sendCreditReportEmail(args: CreditReportArgs): Promise<voi
   const payload = {
     templateName: "credit-report",
     recipientEmail: args.to,
-    idempotencyKey: `credit-report-${args.applicationId}-${args.decision}`,
+    idempotencyKey: `credit-report-${args.applicationId}-${args.decision}-${Date.now()}`,
     templateData: {
       fullName: args.fullName,
       applicationId: args.applicationId,
@@ -54,7 +67,11 @@ export async function sendCreditReportEmail(args: CreditReportArgs): Promise<voi
       interestRate: args.interestRate,
       recommendations: args.recommendations.slice(0, 4),
       overrideApplied: args.overrideApplied,
+      customMessage: args.customMessage ?? null,
+      includeFullReport: args.includeFullReport ?? true,
+      report: args.report ?? null,
     },
+    ...(args.customSubject ? { subject: args.customSubject } : {}),
   };
 
   const res = await fetch(`${origin}/lovable/email/transactional/send`, {
