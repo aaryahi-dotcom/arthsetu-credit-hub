@@ -40,7 +40,7 @@ const BAND_COLORS: Record<string, string> = {
 };
 
 function AdminPage() {
-  const { role, loading } = useAuth();
+  const { role, loading, session } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,12 +55,12 @@ function AdminPage() {
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: () => statsFn(),
-    enabled: role === "admin",
+    enabled: !!session && role === "admin",
   });
   const { data: list, isLoading: listLoading } = useQuery({
     queryKey: ["admin-applications"],
     queryFn: () => listFn(),
-    enabled: role === "admin",
+    enabled: !!session && role === "admin",
   });
 
   if (loading || role !== "admin") {

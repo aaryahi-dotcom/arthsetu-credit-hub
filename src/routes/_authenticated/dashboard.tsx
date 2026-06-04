@@ -25,11 +25,12 @@ const inr = (v: number) =>
   new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(v);
 
 function DashboardPage() {
-  const { role } = useAuth();
+  const { role, session } = useAuth();
   const fetchApps = useServerFn(getMyApplications);
   const { data, isLoading } = useQuery({
     queryKey: ["my-applications"],
     queryFn: () => fetchApps(),
+    enabled: !!session,
   });
 
   const apps = data?.applications ?? [];
