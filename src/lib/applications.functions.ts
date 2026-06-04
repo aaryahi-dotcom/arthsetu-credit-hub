@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { computeScore, type ScoringInput } from "./scoring";
+import { dbError } from "./safe-error";
 
 const num = (max = 1_000_000_000) => z.coerce.number().min(0).max(max);
 
@@ -60,7 +61,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select()
       .single();
 
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "submitApplication");
     return { application: row };
   });
 
@@ -73,6 +74,6 @@ export const getMyApplications = createServerFn({ method: "GET" })
       .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "getMyApplications");
     return { applications: data ?? [] };
   });
