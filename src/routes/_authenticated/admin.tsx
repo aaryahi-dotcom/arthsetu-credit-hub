@@ -40,7 +40,7 @@ const BAND_COLORS: Record<string, string> = {
 };
 
 function AdminPage() {
-  const { role, loading } = useAuth();
+  const { role, loading, session } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
