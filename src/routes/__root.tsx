@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "ArthSetu gives small businesses, MSMEs and gig workers a fair alternate credit score using UPI, utility and rent data — with bank-worker review and audit-ready decisions.",
       },
       { name: "author", content: "ArthSetu" },
-      { property: "og:title", content: "ArthSetu — Score the unscored" },
+      { property: "og:title", content: "ArthSetu — Score the unscored | Alternate Credit Intelligence" },
       {
         property: "og:description",
         content:
@@ -96,6 +96,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@ArthSetu" },
+      { name: "twitter:title", content: "ArthSetu — Score the unscored | Alternate Credit Intelligence" },
+      { name: "description", content: "ArthSetu turns thin-file small businesses, MSMEs and gig workers into bankable customers using alternate data — UPI activity, utility payments, rent, occupation" },
+      { property: "og:description", content: "ArthSetu turns thin-file small businesses, MSMEs and gig workers into bankable customers using alternate data — UPI activity, utility payments, rent, occupation" },
+      { name: "twitter:description", content: "ArthSetu turns thin-file small businesses, MSMEs and gig workers into bankable customers using alternate data — UPI activity, utility payments, rent, occupation" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0b4826ca-d831-4cd9-a0ba-df9b36b42296/id-preview-ec85d937--1c782128-5cf3-405f-a79c-ade01544e5a3.lovable.app-1780565235386.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0b4826ca-d831-4cd9-a0ba-df9b36b42296/id-preview-ec85d937--1c782128-5cf3-405f-a79c-ade01544e5a3.lovable.app-1780565235386.png" },
     ],
     links: [
       {
