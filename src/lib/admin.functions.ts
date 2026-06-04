@@ -3,6 +3,7 @@ import { getRequest } from "@tanstack/react-start/server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { dbError } from "./safe-error";
 
 async function assertAdmin(supabase: SupabaseClient, userId: string) {
   const { data, error } = await supabase
@@ -11,7 +12,7 @@ async function assertAdmin(supabase: SupabaseClient, userId: string) {
     .eq("user_id", userId)
     .eq("role", "admin")
     .maybeSingle();
-  if (error) throw new Error(error.message);
+  if (error) throw dbError(error, "admin");
   if (!data) throw new Error("Forbidden: administrator access required");
 }
 
@@ -24,7 +25,7 @@ export const getAdminStats = createServerFn({ method: "GET" })
     const { data, error } = await supabase
       .from("applications")
       .select("arthsetu_score, score_band, status, override_applied");
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "admin");
 
     const apps = data ?? [];
     const total = apps.length;
@@ -77,7 +78,7 @@ export const listApplications = createServerFn({ method: "GET" })
       .from("applications")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "admin");
     return { applications: data ?? [] };
   });
 
@@ -92,7 +93,7 @@ export const getApplicationDetail = createServerFn({ method: "GET" })
       .select("*")
       .eq("id", data.id)
       .maybeSingle();
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "admin");
     if (!app) throw new Error("Application not found");
 
     const { data: profile } = await supabase
@@ -128,7 +129,7 @@ export const reviewApplication = createServerFn({ method: "POST" })
       .select("*")
       .eq("id", data.id)
       .maybeSingle();
-    if (fetchErr) throw new Error(fetchErr.message);
+    if (fetchErr) throw dbError(fetchErr, "admin.fetch");
     if (!app) throw new Error("Application not found");
 
     const before = {
@@ -166,7 +167,7 @@ export const reviewApplication = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .select()
       .single();
-    if (updErr) throw new Error(updErr.message);
+    if (updErr) throw dbError(updErr, "admin.update");
 
     const req = getRequest();
     const ip =
@@ -237,6 +238,6 @@ export const getAuditTrail = createServerFn({ method: "GET" })
       .select("*")
       .order("created_at", { ascending: false })
       .limit(100);
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "admin");
     return { logs: data ?? [] };
   });
