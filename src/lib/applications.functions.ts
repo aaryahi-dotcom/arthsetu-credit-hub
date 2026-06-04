@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 import { computeScore, type ScoringInput } from "./scoring";
+import { dbError } from "./safe-error";
 
 const num = (max = 1_000_000_000) => z.coerce.number().min(0).max(max);
 
