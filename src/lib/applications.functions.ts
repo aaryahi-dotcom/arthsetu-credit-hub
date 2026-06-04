@@ -61,7 +61,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select()
       .single();
 
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "submitApplication");
     return { application: row };
   });
 
