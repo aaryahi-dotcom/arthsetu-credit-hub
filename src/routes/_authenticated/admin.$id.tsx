@@ -11,6 +11,8 @@ import {
   ShieldAlert,
   Mail,
   AlertTriangle,
+  Send,
+  FileText,
 } from "lucide-react";
 import { getApplicationDetail, reviewApplication } from "@/lib/admin.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
