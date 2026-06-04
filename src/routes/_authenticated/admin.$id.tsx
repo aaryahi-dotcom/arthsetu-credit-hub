@@ -84,6 +84,12 @@ function AdminDetailPage() {
   const [newScore, setNewScore] = useState("");
   const [busy, setBusy] = useState<"approved" | "rejected" | null>(null);
 
+  // Email composer state
+  const [sendEmail, setSendEmail] = useState(true);
+  const [includeReport, setIncludeReport] = useState(true);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     if (!loading && role && role !== "admin") {
       navigate({ to: "/dashboard", replace: true });
