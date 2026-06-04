@@ -102,6 +102,18 @@ function AdminDetailPage() {
     enabled: role === "admin",
   });
 
+  // Prefill the email composer once the applicant is loaded.
+  useEffect(() => {
+    const name = data?.application?.full_name;
+    if (!name) return;
+    setSubject((s) => s || "Your ArthSetu credit assessment is ready");
+    setMessage(
+      (m) =>
+        m ||
+        `Dear ${name},\n\nThank you for applying with ArthSetu. We have completed a careful review of your credit profile, and your personalised assessment is summarised below.\n\nIf you have any questions about this report, simply reply to this email and our team will be glad to help.\n\nWarm regards,\nThe ArthSetu Team`,
+    );
+  }, [data?.application?.full_name]);
+
   if (loading || (role && role !== "admin")) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
