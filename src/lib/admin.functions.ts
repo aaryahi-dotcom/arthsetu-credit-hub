@@ -204,7 +204,8 @@ export const reviewApplication = createServerFn({ method: "POST" })
       .maybeSingle();
 
     let emailSent = false;
-    if (profile?.email) {
+    let emailError: string | null = null;
+    if (data.send_email && profile?.email) {
       try {
         const { sendCreditReportEmail } = await import("./email.server");
         await sendCreditReportEmail({
@@ -221,15 +222,31 @@ export const reviewApplication = createServerFn({ method: "POST" })
             action: string;
           }[]) ?? [],
           overrideApplied: data.override,
+          customSubject: data.email_subject,
+          customMessage: data.email_message,
+          includeFullReport: data.include_full_report,
+          report: data.include_full_report
+            ? {
+                defaultProbability: Number(updated.default_probability ?? 0),
+                interestRate: Number(updated.recommended_interest_rate ?? 0),
+                annualIncome: Number(updated.annual_income ?? 0),
+                monthlyIncome: Number(updated.monthly_net_income ?? 0),
+                netWorth: Number(updated.net_worth ?? 0),
+                cibilScore: Number(updated.cibil_score ?? 0),
+                loanRequested: Number(updated.loan_amount_requested ?? 0),
+                purpose: String(updated.purpose_of_credit ?? ""),
+              }
+            : undefined,
         });
         emailSent = true;
         await supabase.from("applications").update({ email_sent: true }).eq("id", data.id);
       } catch (e) {
+        emailError = e instanceof Error ? e.message : "Email send failed";
         console.error("Email send failed:", e);
       }
     }
 
-    return { application: updated, emailSent };
+    return { application: updated, emailSent, emailError };
   });
 
 export const getAuditTrail = createServerFn({ method: "GET" })
