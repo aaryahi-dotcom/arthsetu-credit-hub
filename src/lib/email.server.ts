@@ -15,6 +15,19 @@ interface CreditReportArgs {
   interestRate: number;
   recommendations: { title: string; action: string }[];
   overrideApplied: boolean;
+  customSubject?: string;
+  customMessage?: string;
+  includeFullReport?: boolean;
+  report?: {
+    defaultProbability: number;
+    interestRate: number;
+    annualIncome: number;
+    monthlyIncome: number;
+    netWorth: number;
+    cibilScore: number;
+    loanRequested: number;
+    purpose: string;
+  };
 }
 
 function getOrigin(): string | null {
