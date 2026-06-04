@@ -99,7 +99,7 @@ function AdminDetailPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-application", id],
     queryFn: () => detailFn({ data: { id } }),
-    enabled: role === "admin",
+    enabled: !!session && role === "admin",
   });
 
   // Prefill the email composer once the applicant is loaded.
