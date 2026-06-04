@@ -55,12 +55,12 @@ function AdminPage() {
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: () => statsFn(),
-    enabled: role === "admin",
+    enabled: !!session && role === "admin",
   });
   const { data: list, isLoading: listLoading } = useQuery({
     queryKey: ["admin-applications"],
     queryFn: () => listFn(),
-    enabled: role === "admin",
+    enabled: !!session && role === "admin",
   });
 
   if (loading || role !== "admin") {
