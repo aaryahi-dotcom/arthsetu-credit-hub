@@ -74,6 +74,6 @@ export const getMyApplications = createServerFn({ method: "GET" })
       .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) throw dbError(error, "getMyApplications");
     return { applications: data ?? [] };
   });
