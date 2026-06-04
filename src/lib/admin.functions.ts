@@ -111,6 +111,10 @@ const reviewSchema = z.object({
   override: z.boolean().default(false),
   new_score: z.coerce.number().min(300).max(900).optional(),
   reason: z.string().trim().max(1000).optional(),
+  send_email: z.boolean().default(true),
+  email_subject: z.string().trim().min(1).max(200).optional(),
+  email_message: z.string().trim().max(5000).optional(),
+  include_full_report: z.boolean().default(true),
 });
 
 export const reviewApplication = createServerFn({ method: "POST" })
