@@ -138,6 +138,10 @@ function AdminDetailPage() {
       toast.error("Please give a reason (min 5 chars) for the override.");
       return;
     }
+    if (sendEmail && subject.trim().length === 0) {
+      toast.error("Please add an email subject before sending.");
+      return;
+    }
     setBusy(decision);
     try {
       const res = await reviewFn({
@@ -147,13 +151,23 @@ function AdminDetailPage() {
           override,
           reason: override ? reason : undefined,
           new_score: override && newScore ? Number(newScore) : undefined,
+          send_email: sendEmail,
+          email_subject: sendEmail ? subject.trim() : undefined,
+          email_message: sendEmail ? message.trim() : undefined,
+          include_full_report: includeReport,
         },
       });
-      toast.success(
-        res.emailSent
-          ? `Decision saved. Report emailed to the applicant.`
-          : `Decision saved. (Email pending email-domain setup.)`,
-      );
+      if (!sendEmail) {
+        toast.success("Decision saved. No email was sent.");
+      } else if (res.emailSent) {
+        toast.success("Decision saved and the report was emailed to the applicant.");
+      } else {
+        toast.warning(
+          res.emailError
+            ? `Decision saved, but the email could not be sent: ${res.emailError}`
+            : "Decision saved, but email sending is not configured yet.",
+        );
+      }
       qc.invalidateQueries({ queryKey: ["admin-application", id] });
       qc.invalidateQueries({ queryKey: ["admin-applications"] });
       qc.invalidateQueries({ queryKey: ["admin-stats"] });
