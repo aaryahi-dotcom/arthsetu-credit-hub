@@ -72,7 +72,7 @@ const FIELD_GROUPS: { title: string; fields: [string, string][] }[] = [
 
 function AdminDetailPage() {
   const { id } = Route.useParams();
-  const { role, loading } = useAuth();
+  const { role, loading, session } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
 
