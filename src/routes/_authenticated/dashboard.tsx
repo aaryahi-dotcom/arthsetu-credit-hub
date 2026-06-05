@@ -2,12 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "motion/react";
-import { ArrowRight, Clock, FileText, IndianRupee, Percent, Loader2 } from "lucide-react";
+import { ArrowRight, Clock, FileText, IndianRupee, Percent, Loader2, Download } from "lucide-react";
 import { getMyApplications } from "@/lib/applications.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
+import { downloadApplicationReport, type ReportApplication } from "@/lib/report";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
