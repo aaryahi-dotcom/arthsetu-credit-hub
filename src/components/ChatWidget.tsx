@@ -215,7 +215,7 @@ export function ChatWidget() {
                     )}
                   >
                     {m.role === "assistant" ? (
-                      <div className="prose prose-sm max-w-none break-words dark:prose-invert prose-p:my-1.5 prose-ul:my-1.5 prose-li:my-0.5">
+                      <div className="chat-md break-words">
                         <ReactMarkdown>{m.content || "…"}</ReactMarkdown>
                       </div>
                     ) : (
