@@ -107,7 +107,24 @@ function DashboardPage() {
             transition={{ delay: 0.1 }}
             className="rounded-3xl border border-border/60 bg-gradient-surface p-8 lg:col-span-2"
           >
-            <h2 className="font-display text-xl font-semibold">Latest application</h2>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="font-display text-xl font-semibold">Latest application</h2>
+              {decided && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    try {
+                      downloadApplicationReport(latest as unknown as ReportApplication);
+                    } catch {
+                      toast.error("Could not generate the report. Please try again.");
+                    }
+                  }}
+                >
+                  <Download className="h-4 w-4" /> Download report
+                </Button>
+              )}
+            </div>
             {decided ? (
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Metric icon={IndianRupee} label="Recommended credit limit" value={`₹${inr(Number(latest.recommended_credit_limit ?? 0))}`} />
