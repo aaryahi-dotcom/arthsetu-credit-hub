@@ -47,11 +47,20 @@ function DashboardPage() {
           <p className="mt-1 text-muted-foreground">Track your ArthSetu credit assessment.</p>
         </div>
         {role !== "admin" && (
-          <Button asChild className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-            <Link to="/apply">
-              New application <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            {decided && (
+              <Button asChild variant="outline">
+                <Link to="/roadmap">
+                  <Sparkles className="h-4 w-4" /> Improvement roadmap
+                </Link>
+              </Button>
+            )}
+            <Button asChild className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+              <Link to="/apply">
+                New application <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
 
