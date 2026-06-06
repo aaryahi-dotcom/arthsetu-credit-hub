@@ -178,7 +178,10 @@ function AdminPage() {
               <span className="col-span-2">Status</span>
               <span className="col-span-2 text-right">Action</span>
             </div>
-            {apps.map((a) => (
+            {apps.map((a) => {
+              const flags = detectAnomalies(a as unknown as RiskApplication);
+              const risk = fraudRisk(flags);
+              return (
               <Link
                 key={a.id}
                 to="/admin/$id"
@@ -186,7 +189,21 @@ function AdminPage() {
                 className="grid grid-cols-2 items-center gap-2 border-b border-border/40 bg-card/20 px-5 py-4 transition-colors last:border-0 hover:bg-card/50 sm:grid-cols-12"
               >
                 <div className="col-span-4">
-                  <p className="font-medium">{a.full_name}</p>
+                  <p className="flex items-center gap-1.5 font-medium">
+                    {a.full_name}
+                    {flags.length > 0 && (
+                      <span
+                        title={`${flags.length} anomaly flag(s)`}
+                        className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${
+                          risk === "elevated"
+                            ? "border-destructive/30 bg-destructive/15 text-destructive"
+                            : "border-warning/30 bg-warning/15 text-warning"
+                        }`}
+                      >
+                        <AlertTriangle className="h-3 w-3" /> {flags.length}
+                      </span>
+                    )}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {new Date(a.created_at).toLocaleDateString()}
                   </p>
