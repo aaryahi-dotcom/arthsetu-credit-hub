@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "motion/react";
-import { ArrowRight, Clock, FileText, IndianRupee, Percent, Loader2, Download } from "lucide-react";
+import { ArrowRight, Clock, FileText, IndianRupee, Percent, Loader2, Download, Sparkles } from "lucide-react";
 import { getMyApplications } from "@/lib/applications.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
 import { Button } from "@/components/ui/button";
@@ -47,11 +47,20 @@ function DashboardPage() {
           <p className="mt-1 text-muted-foreground">Track your ArthSetu credit assessment.</p>
         </div>
         {role !== "admin" && (
-          <Button asChild className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
-            <Link to="/apply">
-              New application <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            {decided && (
+              <Button asChild variant="outline">
+                <Link to="/roadmap">
+                  <Sparkles className="h-4 w-4" /> Improvement roadmap
+                </Link>
+              </Button>
+            )}
+            <Button asChild className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
+              <Link to="/apply">
+                New application <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
 

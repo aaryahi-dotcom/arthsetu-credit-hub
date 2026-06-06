@@ -12,8 +12,9 @@ import {
   Cell,
   Tooltip,
 } from "recharts";
-import { Loader2, ShieldAlert, ArrowRight } from "lucide-react";
+import { Loader2, ShieldAlert, ArrowRight, AlertTriangle, BarChart3 } from "lucide-react";
 import { getAdminStats, listApplications } from "@/lib/admin.functions";
+import { detectAnomalies, fraudRisk, type RiskApplication } from "@/lib/risk";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
@@ -88,10 +89,20 @@ function AdminPage() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl font-bold sm:text-4xl">Officer console</h1>
-      <p className="mt-1 text-muted-foreground">
-        Review applications, override AI decisions, and trigger applicant reports.
-      </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">Officer console</h1>
+          <p className="mt-1 text-muted-foreground">
+            Review applications, override AI decisions, and trigger applicant reports.
+          </p>
+        </div>
+        <Link
+          to="/admin/analytics"
+          className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-card/70"
+        >
+          <BarChart3 className="h-4 w-4 text-primary" /> Risk &amp; fraud analytics
+        </Link>
+      </div>
 
       {statsLoading ? (
         <div className="mt-10 flex justify-center">
@@ -167,7 +178,10 @@ function AdminPage() {
               <span className="col-span-2">Status</span>
               <span className="col-span-2 text-right">Action</span>
             </div>
-            {apps.map((a) => (
+            {apps.map((a) => {
+              const flags = detectAnomalies(a as unknown as RiskApplication);
+              const risk = fraudRisk(flags);
+              return (
               <Link
                 key={a.id}
                 to="/admin/$id"
@@ -175,7 +189,21 @@ function AdminPage() {
                 className="grid grid-cols-2 items-center gap-2 border-b border-border/40 bg-card/20 px-5 py-4 transition-colors last:border-0 hover:bg-card/50 sm:grid-cols-12"
               >
                 <div className="col-span-4">
-                  <p className="font-medium">{a.full_name}</p>
+                  <p className="flex items-center gap-1.5 font-medium">
+                    {a.full_name}
+                    {flags.length > 0 && (
+                      <span
+                        title={`${flags.length} anomaly flag(s)`}
+                        className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold ${
+                          risk === "elevated"
+                            ? "border-destructive/30 bg-destructive/15 text-destructive"
+                            : "border-warning/30 bg-warning/15 text-warning"
+                        }`}
+                      >
+                        <AlertTriangle className="h-3 w-3" /> {flags.length}
+                      </span>
+                    )}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {new Date(a.created_at).toLocaleDateString()}
                   </p>
@@ -195,7 +223,8 @@ function AdminPage() {
                   Review <ArrowRight className="ml-1 h-4 w-4" />
                 </span>
               </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
