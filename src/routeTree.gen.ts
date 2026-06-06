@@ -20,6 +20,7 @@ import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedApplyRouteImport } from './routes/_authenticated/apply'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminIdRouteImport } from './routes/_authenticated/admin.$id'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -76,6 +77,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminAnalyticsRoute =
+  AuthenticatedAdminAnalyticsRouteImport.update({
+    id: '/admin/analytics',
+    path: '/admin/analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminIdRoute = AuthenticatedAdminIdRouteImport.update({
   id: '/admin/$id',
   path: '/admin/$id',
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/admin/$id': typeof AuthenticatedAdminIdRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/admin/$id': typeof AuthenticatedAdminIdRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -121,6 +130,7 @@ export interface FileRoutesById {
   '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/admin/$id': typeof AuthenticatedAdminIdRoute
+  '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/api/chat'
     | '/admin/$id'
+    | '/admin/analytics'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/api/chat'
     | '/admin/$id'
+    | '/admin/analytics'
     | '/admin'
   id:
     | '__root__'
@@ -163,6 +175,7 @@ export interface FileRouteTypes {
     | '/_authenticated/roadmap'
     | '/api/chat'
     | '/_authenticated/admin/$id'
+    | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -255,6 +268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/analytics': {
+      id: '/_authenticated/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/$id': {
       id: '/_authenticated/admin/$id'
       path: '/admin/$id'
@@ -270,6 +290,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
   AuthenticatedAdminIdRoute: typeof AuthenticatedAdminIdRoute
+  AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
@@ -278,6 +299,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
   AuthenticatedAdminIdRoute: AuthenticatedAdminIdRoute,
+  AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
