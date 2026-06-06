@@ -223,7 +223,8 @@ function AdminPage() {
                   Review <ArrowRight className="ml-1 h-4 w-4" />
                 </span>
               </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
