@@ -89,10 +89,20 @@ function AdminPage() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl font-bold sm:text-4xl">Officer console</h1>
-      <p className="mt-1 text-muted-foreground">
-        Review applications, override AI decisions, and trigger applicant reports.
-      </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">Officer console</h1>
+          <p className="mt-1 text-muted-foreground">
+            Review applications, override AI decisions, and trigger applicant reports.
+          </p>
+        </div>
+        <Link
+          to="/admin/analytics"
+          className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-card/70"
+        >
+          <BarChart3 className="h-4 w-4 text-primary" /> Risk &amp; fraud analytics
+        </Link>
+      </div>
 
       {statsLoading ? (
         <div className="mt-10 flex justify-center">
