@@ -12,8 +12,9 @@ import {
   Cell,
   Tooltip,
 } from "recharts";
-import { Loader2, ShieldAlert, ArrowRight } from "lucide-react";
+import { Loader2, ShieldAlert, ArrowRight, AlertTriangle, BarChart3 } from "lucide-react";
 import { getAdminStats, listApplications } from "@/lib/admin.functions";
+import { detectAnomalies, fraudRisk, type RiskApplication } from "@/lib/risk";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
