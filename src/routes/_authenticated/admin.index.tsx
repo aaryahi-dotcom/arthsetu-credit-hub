@@ -96,12 +96,20 @@ function AdminPage() {
             Review applications, override AI decisions, and trigger applicant reports.
           </p>
         </div>
-        <Link
-          to="/admin/analytics"
-          className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-card/70"
-        >
-          <BarChart3 className="h-4 w-4 text-primary" /> Risk &amp; fraud analytics
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            to="/admin/workflow"
+            className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-card/70"
+          >
+            <Workflow className="h-4 w-4 text-primary" /> Approval automation
+          </Link>
+          <Link
+            to="/admin/analytics"
+            className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-card/70"
+          >
+            <BarChart3 className="h-4 w-4 text-primary" /> Risk &amp; fraud analytics
+          </Link>
+        </div>
       </div>
 
       {statsLoading ? (
