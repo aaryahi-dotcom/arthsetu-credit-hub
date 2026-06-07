@@ -16,10 +16,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedSimulatorRouteImport } from './routes/_authenticated/simulator'
 import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
+import { Route as AuthenticatedRepaymentRouteImport } from './routes/_authenticated/repayment'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedApplyRouteImport } from './routes/_authenticated/apply'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminWorkflowRouteImport } from './routes/_authenticated/admin.workflow'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminIdRouteImport } from './routes/_authenticated/admin.$id'
 
@@ -57,9 +60,19 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSimulatorRoute = AuthenticatedSimulatorRouteImport.update({
+  id: '/simulator',
+  path: '/simulator',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
   id: '/roadmap',
   path: '/roadmap',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRepaymentRoute = AuthenticatedRepaymentRouteImport.update({
+  id: '/repayment',
+  path: '/repayment',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -77,6 +90,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminWorkflowRoute =
+  AuthenticatedAdminWorkflowRouteImport.update({
+    id: '/admin/workflow',
+    path: '/admin/workflow',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminAnalyticsRoute =
   AuthenticatedAdminAnalyticsRouteImport.update({
     id: '/admin/analytics',
@@ -97,10 +116,13 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/apply': typeof AuthenticatedApplyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/repayment': typeof AuthenticatedRepaymentRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
+  '/simulator': typeof AuthenticatedSimulatorRoute
   '/api/chat': typeof ApiChatRoute
   '/admin/$id': typeof AuthenticatedAdminIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/workflow': typeof AuthenticatedAdminWorkflowRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -111,10 +133,13 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/apply': typeof AuthenticatedApplyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/repayment': typeof AuthenticatedRepaymentRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
+  '/simulator': typeof AuthenticatedSimulatorRoute
   '/api/chat': typeof ApiChatRoute
   '/admin/$id': typeof AuthenticatedAdminIdRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/workflow': typeof AuthenticatedAdminWorkflowRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -127,10 +152,13 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/apply': typeof AuthenticatedApplyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/repayment': typeof AuthenticatedRepaymentRoute
   '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
+  '/_authenticated/simulator': typeof AuthenticatedSimulatorRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/admin/$id': typeof AuthenticatedAdminIdRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/workflow': typeof AuthenticatedAdminWorkflowRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -143,10 +171,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/apply'
     | '/dashboard'
+    | '/repayment'
     | '/roadmap'
+    | '/simulator'
     | '/api/chat'
     | '/admin/$id'
     | '/admin/analytics'
+    | '/admin/workflow'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -157,10 +188,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/apply'
     | '/dashboard'
+    | '/repayment'
     | '/roadmap'
+    | '/simulator'
     | '/api/chat'
     | '/admin/$id'
     | '/admin/analytics'
+    | '/admin/workflow'
     | '/admin'
   id:
     | '__root__'
@@ -172,10 +206,13 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/apply'
     | '/_authenticated/dashboard'
+    | '/_authenticated/repayment'
     | '/_authenticated/roadmap'
+    | '/_authenticated/simulator'
     | '/api/chat'
     | '/_authenticated/admin/$id'
     | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/workflow'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -240,11 +277,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/simulator': {
+      id: '/_authenticated/simulator'
+      path: '/simulator'
+      fullPath: '/simulator'
+      preLoaderRoute: typeof AuthenticatedSimulatorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/roadmap': {
       id: '/_authenticated/roadmap'
       path: '/roadmap'
       fullPath: '/roadmap'
       preLoaderRoute: typeof AuthenticatedRoadmapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/repayment': {
+      id: '/_authenticated/repayment'
+      path: '/repayment'
+      fullPath: '/repayment'
+      preLoaderRoute: typeof AuthenticatedRepaymentRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -268,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/workflow': {
+      id: '/_authenticated/admin/workflow'
+      path: '/admin/workflow'
+      fullPath: '/admin/workflow'
+      preLoaderRoute: typeof AuthenticatedAdminWorkflowRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/analytics': {
       id: '/_authenticated/admin/analytics'
       path: '/admin/analytics'
@@ -288,18 +346,24 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedApplyRoute: typeof AuthenticatedApplyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedRepaymentRoute: typeof AuthenticatedRepaymentRoute
   AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
+  AuthenticatedSimulatorRoute: typeof AuthenticatedSimulatorRoute
   AuthenticatedAdminIdRoute: typeof AuthenticatedAdminIdRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminWorkflowRoute: typeof AuthenticatedAdminWorkflowRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedApplyRoute: AuthenticatedApplyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedRepaymentRoute: AuthenticatedRepaymentRoute,
   AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
+  AuthenticatedSimulatorRoute: AuthenticatedSimulatorRoute,
   AuthenticatedAdminIdRoute: AuthenticatedAdminIdRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminWorkflowRoute: AuthenticatedAdminWorkflowRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 

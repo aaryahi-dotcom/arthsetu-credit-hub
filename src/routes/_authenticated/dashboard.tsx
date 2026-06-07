@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "motion/react";
-import { ArrowRight, Clock, FileText, IndianRupee, Percent, Loader2, Download, Sparkles } from "lucide-react";
+import { ArrowRight, Clock, FileText, IndianRupee, Percent, Loader2, Download, Sparkles, Wallet, SlidersHorizontal } from "lucide-react";
 import { getMyApplications } from "@/lib/applications.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
 import { Button } from "@/components/ui/button";
@@ -49,11 +49,23 @@ function DashboardPage() {
         {role !== "admin" && (
           <div className="flex flex-wrap gap-2">
             {decided && (
-              <Button asChild variant="outline">
-                <Link to="/roadmap">
-                  <Sparkles className="h-4 w-4" /> Improvement roadmap
-                </Link>
-              </Button>
+              <>
+                <Button asChild variant="outline">
+                  <Link to="/roadmap">
+                    <Sparkles className="h-4 w-4" /> Improvement roadmap
+                  </Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link to="/repayment">
+                    <Wallet className="h-4 w-4" /> Repayment insights
+                  </Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link to="/simulator">
+                    <SlidersHorizontal className="h-4 w-4" /> Credit simulator
+                  </Link>
+                </Button>
+              </>
             )}
             <Button asChild className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90">
               <Link to="/apply">
