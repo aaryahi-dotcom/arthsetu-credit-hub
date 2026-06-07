@@ -371,6 +371,8 @@ function AdminDetailPage() {
 
         {/* Applicant data */}
         <div className="space-y-6 lg:col-span-2">
+          <ModelRiskCard app={app as Record<string, unknown>} />
+
           {FIELD_GROUPS.map((group, gi) => (
             <motion.div
               key={group.title}
