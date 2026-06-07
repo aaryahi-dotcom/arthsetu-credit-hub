@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getApplicationDetail, reviewApplication } from "@/lib/admin.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
+import { ModelRiskCard } from "@/components/ModelRiskCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
