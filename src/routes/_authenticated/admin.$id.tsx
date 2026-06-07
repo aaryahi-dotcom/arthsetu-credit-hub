@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getApplicationDetail, reviewApplication } from "@/lib/admin.functions";
 import { ScoreGauge } from "@/components/ScoreGauge";
+import { ModelRiskCard } from "@/components/ModelRiskCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -370,6 +371,8 @@ function AdminDetailPage() {
 
         {/* Applicant data */}
         <div className="space-y-6 lg:col-span-2">
+          <ModelRiskCard app={app as unknown as import("@/lib/scoring").ScoringInput} />
+
           {FIELD_GROUPS.map((group, gi) => (
             <motion.div
               key={group.title}
