@@ -17,6 +17,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
+import { Route as AuthenticatedRepaymentRouteImport } from './routes/_authenticated/repayment'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedApplyRouteImport } from './routes/_authenticated/apply'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -62,6 +63,11 @@ const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
   path: '/roadmap',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRepaymentRoute = AuthenticatedRepaymentRouteImport.update({
+  id: '/repayment',
+  path: '/repayment',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/apply': typeof AuthenticatedApplyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/repayment': typeof AuthenticatedRepaymentRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/admin/$id': typeof AuthenticatedAdminIdRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/apply': typeof AuthenticatedApplyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/repayment': typeof AuthenticatedRepaymentRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/admin/$id': typeof AuthenticatedAdminIdRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/apply': typeof AuthenticatedApplyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/repayment': typeof AuthenticatedRepaymentRoute
   '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/admin/$id': typeof AuthenticatedAdminIdRoute
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/apply'
     | '/dashboard'
+    | '/repayment'
     | '/roadmap'
     | '/api/chat'
     | '/admin/$id'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/apply'
     | '/dashboard'
+    | '/repayment'
     | '/roadmap'
     | '/api/chat'
     | '/admin/$id'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/apply'
     | '/_authenticated/dashboard'
+    | '/_authenticated/repayment'
     | '/_authenticated/roadmap'
     | '/api/chat'
     | '/_authenticated/admin/$id'
@@ -247,6 +259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRoadmapRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/repayment': {
+      id: '/_authenticated/repayment'
+      path: '/repayment'
+      fullPath: '/repayment'
+      preLoaderRoute: typeof AuthenticatedRepaymentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -288,6 +307,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedApplyRoute: typeof AuthenticatedApplyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedRepaymentRoute: typeof AuthenticatedRepaymentRoute
   AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
   AuthenticatedAdminIdRoute: typeof AuthenticatedAdminIdRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
@@ -297,6 +317,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedApplyRoute: AuthenticatedApplyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedRepaymentRoute: AuthenticatedRepaymentRoute,
   AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
   AuthenticatedAdminIdRoute: AuthenticatedAdminIdRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
@@ -318,3 +339,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
